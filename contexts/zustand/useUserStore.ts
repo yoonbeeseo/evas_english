@@ -9,6 +9,10 @@ export interface AdminUser {
   address: null | { zipcode: string; rest: string; roadAddress: string };
   uid: string;
   subjects: string[];
+  students: Student[];
+  lessons: Lesson[];
+  schools: School[];
+  parents: Parent[];
 }
 
 interface Props {
