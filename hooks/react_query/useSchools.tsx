@@ -52,7 +52,8 @@ const useSchools = ({ queryKey, uid }: { queryKey: any[]; uid: string }) => {
     await mutation.mutateAsync({ method: "POST", payload });
 
   const onUpdate = async (payload: School) =>
-    await mutation.mutateAsync({ method: "PATCH", payload });
+    await mutation.mutateAsync({ method: "PUT", payload });
+
   const onPatch = async (payload: School) =>
     await mutation.mutateAsync({ method: "PATCH", payload });
 

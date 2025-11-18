@@ -16,7 +16,7 @@ const SchoolModal = ({
   onCancel,
   onSuccess,
 }: ModalProps<School> & { uid: string }) => {
-  const initialState = useMemo<SchoolPayload>(
+  const initialState = useMemo<School | SchoolPayload>(
     () => payload ?? { level: null, name: "", sort: "" },
     [payload]
   );
@@ -71,7 +71,7 @@ const SchoolModal = ({
           }
         }
         if (payload) {
-          await onUpdate(state[0]);
+          await onUpdate(state[0] as School);
         } else {
           await onCreate(state[0]);
         }

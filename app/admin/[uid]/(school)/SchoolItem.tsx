@@ -48,6 +48,7 @@ const SchoolItem = ({ ...school }: School) => {
             uid={user?.uid as string}
             payload={school}
             onCancel={Edit.handler}
+            onSuccess={Edit.handler}
           />
         </Edit.Container>
       </Edit.Modal>

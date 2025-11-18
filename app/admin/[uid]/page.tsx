@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { ComponentProps } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { twMerge } from "tailwind-merge";
 import Main from "./(admin)/Main";
 
 const AdminPage = async ({ params }: { params: Promise<{ uid: string }> }) => {

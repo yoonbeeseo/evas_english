@@ -3,6 +3,11 @@
 import { AdminUser } from "@/contexts/zustand";
 import Link from "next/link";
 import { ComponentProps } from "react";
+import {
+  IoBusinessOutline,
+  IoEaselOutline,
+  IoPersonCircleOutline,
+} from "react-icons/io5";
 import { twMerge } from "tailwind-merge";
 
 interface Props {
@@ -40,7 +45,33 @@ const Main = ({
               더보기
             </Link>
           </div>
-          <div>section here</div>
+          <ul className="flex gap-2 overflow-x-auto">
+            {data && data.length > 0 ? (
+              data.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    className="flex-col size-12 bg-transparent hover:bg-gray-50 rounded gap-1"
+                    href={pathname + href + "/" + item.id}
+                  >
+                    <div className="icon size-8 items-center justify-center text-gray-500">
+                      {target === "명" ? (
+                        <IoPersonCircleOutline />
+                      ) : target.includes("클래스") ? (
+                        <IoEaselOutline />
+                      ) : (
+                        <IoBusinessOutline />
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 truncate max-w-12">
+                      {item.name}
+                    </p>
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <>section here</>
+            )}
+          </ul>
         </Container>
       ))}
     </>
