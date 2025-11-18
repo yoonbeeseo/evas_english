@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const useSchools = ({ queryKey }: { queryKey: any[]; uid: string }) => {
+const useSchools = ({ queryKey, uid }: { queryKey: any[]; uid: string }) => {
   const queryClient = useQueryClient();
 
   const caching = () => queryClient.invalidateQueries({ queryKey });
@@ -11,7 +11,7 @@ const useSchools = ({ queryKey }: { queryKey: any[]; uid: string }) => {
       payload,
     }: {
       method: ActionMethod;
-      payload: string | number | SchoolPayload;
+      payload: string | number | SchoolPayload | School;
     }) => {
       let url = `http://localhost:3000/api/v1/school?uid=${uid}`;
       if (
@@ -19,6 +19,10 @@ const useSchools = ({ queryKey }: { queryKey: any[]; uid: string }) => {
         typeof payload === "number"
       ) {
         url = url + "/" + payload;
+      } else if (method !== "POST") {
+        url = `http://localhost:3000/api/v1/school/${
+          (payload as School).id
+        }?uid=${uid}`;
       }
 
       const res = await fetch(url, {
@@ -45,15 +49,18 @@ const useSchools = ({ queryKey }: { queryKey: any[]; uid: string }) => {
     await mutation.mutateAsync({ method: "DELETE", payload });
 
   const onCreate = async (payload: SchoolPayload) =>
-    await mutation.mutateAsync({ method: "CREATE", payload });
+    await mutation.mutateAsync({ method: "POST", payload });
 
-  const onUpdate = async (payload: SchoolPayload) =>
-    await mutation.mutateAsync({ method: "UPDATE", payload });
+  const onUpdate = async (payload: School) =>
+    await mutation.mutateAsync({ method: "PATCH", payload });
+  const onPatch = async (payload: School) =>
+    await mutation.mutateAsync({ method: "PATCH", payload });
 
   return {
     onDelete,
     onCreate,
     onUpdate,
+    onPatch,
   };
 };
 

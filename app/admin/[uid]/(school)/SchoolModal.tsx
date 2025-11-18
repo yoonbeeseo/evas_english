@@ -8,7 +8,14 @@ import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 
-const SchoolModal = ({ payload, isStudent, queryKey }: ModalProps<School>) => {
+const SchoolModal = ({
+  payload,
+  isStudent,
+  queryKey,
+  uid,
+  onCancel,
+  onSuccess,
+}: ModalProps<School> & { uid: string }) => {
   const initialState = useMemo<SchoolPayload>(
     () => payload ?? { level: null, name: "", sort: "" },
     [payload]
@@ -43,7 +50,11 @@ const SchoolModal = ({ payload, isStudent, queryKey }: ModalProps<School>) => {
   const router = useRouter();
 
   const { alert } = useAlertStore();
-  const { onCreate, onUpdate } = useSchools({ queryKey });
+  const { onCreate, onUpdate } = useSchools({
+    queryKey,
+    uid,
+  });
+
   const onSubmit = useCallback(
     () =>
       handler(async () => {
@@ -65,7 +76,7 @@ const SchoolModal = ({ payload, isStudent, queryKey }: ModalProps<School>) => {
           await onCreate(state[0]);
         }
         alert(`${payload ? "수정" : "등록"}되었습니다.`, [
-          { onClick: router.back },
+          { onClick: onSuccess ?? router.back },
         ]);
       }),
     [
@@ -80,19 +91,24 @@ const SchoolModal = ({ payload, isStudent, queryKey }: ModalProps<School>) => {
       isStudent,
       payload,
       router,
+      onSuccess,
     ]
+  );
+
+  const handleCancel = useCallback(
+    () =>
+      alert(`${payload ? "수정을" : "등록을"} 취소하시겠습니까?`, [
+        { onClick: onCancel ?? router.back, text: "취소", warning: true },
+        { text: "계속" },
+      ]),
+    [alert, router, payload, onCancel]
   );
 
   return (
     <div>
       <div className="row">
         <button
-          onClick={() =>
-            alert(`${payload ? "수정을" : "등록을"} 취소하시겠습니까?`, [
-              { onClick: router.back, text: "취소", warning: true },
-              { text: "계속" },
-            ])
-          }
+          onClick={handleCancel}
           className="text bg-transparent font-bold hover:text-blue-500"
         >
           <IoChevronBack />
@@ -118,8 +134,10 @@ const SchoolModal = ({ payload, isStudent, queryKey }: ModalProps<School>) => {
           label="학교이름"
         />
         <SubmitArea>
-          <CancelButton>취소</CancelButton>
-          <SubmitButton className="flex-1">등록</SubmitButton>
+          <CancelButton onClick={handleCancel}>취소</CancelButton>
+          <SubmitButton className="flex-1">
+            {payload ? "수정" : "등록"}
+          </SubmitButton>
         </SubmitArea>
       </Form>
     </div>

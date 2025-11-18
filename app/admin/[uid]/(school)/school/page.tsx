@@ -1,20 +1,32 @@
-"use client";
+import { Fragment } from "react/jsx-runtime";
+import SchoolItem from "../SchoolItem";
+import AddSchoolButton from "./AddSchoolButton";
 
-import { useTextInput } from "@/hooks";
-import { useMemo, useState } from "react";
+const SchoolPage = async ({ params }: { params: Promise<{ uid: string }> }) => {
+  const { uid } = await params;
+  const res = await fetch(`${process.env.API_URL}/school?uid=${uid}`);
+  const schools = (await res.json()) as School[];
 
-const SchoolPage = ({ payload }: ModalProps<School>) => {
-  const initialState = useMemo<SchoolPayload>(
-    () => payload ?? { level: null, name: "", sort: "" },
-    [payload]
-  );
-  const [props, setProps] = useState(initialState);
-  const Sort = useTextInput();
-  const Name = useTextInput();
-  const Level = useTextInput();
   return (
-    <div>
-      <Name.TextInput {...Name.props} placeholder="학교 이름" />
+    <div className="container">
+      <div className="row items-center">
+        <h1 className="flex-1">
+          <b>학교 목록 관리</b>: {schools.length}개의 학교
+        </h1>
+        <AddSchoolButton />
+      </div>
+      <ul className="">
+        {schools.map((school, index) => {
+          return (
+            <Fragment key={school.id}>
+              <SchoolItem {...school} />
+              {index < schools.length && schools.length > 1 && (
+                <div className="line" />
+              )}
+            </Fragment>
+          );
+        })}
+      </ul>
     </div>
   );
 };

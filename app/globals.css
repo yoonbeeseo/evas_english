@@ -5,6 +5,9 @@
 }
 
 @layer base {
+  * {
+    @apply border-gray-200 dark:border-gray-800;
+  }
   a,
   button {
     @apply cursor-pointer bg-light_bg flex justify-center gap-1 h-12 items-center px-2 hover:bg-gray-100 transition-all;
@@ -16,5 +19,27 @@
 
   div.row {
     @apply flex-row;
+  }
+}
+
+@layer components {
+  .container {
+    @apply flex flex-col rounded p-2;
+  }
+
+  .background {
+    @apply bg-gray-50 dark:bg-gray-950;
+  }
+
+  button.icon,
+  a.icon {
+    @apply size-10 bg-transparent hover:bg-gray-50 rounded hover:text-blue-500;
+  }
+  .icon.delete {
+    @apply hover:text-red-500;
+  }
+
+  .line {
+    @apply bg-gray-200 h-[1px];
   }
 }

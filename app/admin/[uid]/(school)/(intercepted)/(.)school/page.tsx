@@ -1,12 +1,13 @@
 "use client";
 import { useAuth } from "@/contexts/react/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { useSchools } from "@/hooks/react_query";
 import Spinner from "@/components/ui/Spinner";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SchoolItem from "../../SchoolItem";
+import AddSchoolButton from "../../school/AddSchoolButton";
 
 const InterceptedSchoolPage = () => {
   const { user } = useAuth();
@@ -28,7 +29,6 @@ const InterceptedSchoolPage = () => {
       return schools ?? [];
     },
   });
-  const { onDelete, onCreate, onUpdate } = useSchools({ queryKey });
 
   const pathname = usePathname();
   if (!user) {
@@ -36,28 +36,32 @@ const InterceptedSchoolPage = () => {
   }
 
   return (
-    <>
-      <h1>InterceptedSchoolPage</h1>
+    <div className="container">
+      <div className="row items-center">
+        <h1 className="flex-1">InterceptedSchoolPage</h1>
+        <AddSchoolButton />
+      </div>
       {isPending ? (
         <Spinner />
       ) : (
-        <div>
+        <ul>
           {error ? (
             <p>{error.message}</p>
           ) : data?.length === 0 ? (
             <Link href={pathname + "/modal"}>Click here to add school</Link>
           ) : (
-            data?.map((school) => (
-              <SchoolItem
-                key={school.id}
-                {...school}
-                onDelete={async () => onDelete(school.id)}
-              />
+            data?.map((school, index) => (
+              <Fragment key={school.id}>
+                <SchoolItem key={school.id} {...school} />
+                {index < data.length - 1 && data.length > 1 && (
+                  <div className="line" />
+                )}
+              </Fragment>
             ))
           )}
-        </div>
+        </ul>
       )}
-    </>
+    </div>
   );
 };
 

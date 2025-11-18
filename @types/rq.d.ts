@@ -1,1 +1,1 @@
-type ActionMethod = "CREATE" | "READ" | "UPDATE" | "DELETE";
+type ActionMethod = "POST" | "GET" | "PATCH" | "PUT" | "DELETE";
