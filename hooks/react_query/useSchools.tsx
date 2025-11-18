@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const useSchools = ({ queryKey }: { queryKey: any[] }) => {
+const useSchools = ({ queryKey }: { queryKey: any[]; uid: string }) => {
   const queryClient = useQueryClient();
 
   const caching = () => queryClient.invalidateQueries({ queryKey });
@@ -13,7 +13,7 @@ const useSchools = ({ queryKey }: { queryKey: any[] }) => {
       method: ActionMethod;
       payload: string | number | SchoolPayload;
     }) => {
-      let url = "http://localhost:3000/api/v1/school";
+      let url = `http://localhost:3000/api/v1/school?uid=${uid}`;
       if (
         (method === "DELETE" && typeof payload === "string") ||
         typeof payload === "number"
@@ -23,7 +23,9 @@ const useSchools = ({ queryKey }: { queryKey: any[] }) => {
 
       const res = await fetch(url, {
         body: method !== "DELETE" ? JSON.stringify(payload) : undefined,
+        method,
       });
+
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.message);

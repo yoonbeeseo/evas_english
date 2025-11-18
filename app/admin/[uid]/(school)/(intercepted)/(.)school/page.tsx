@@ -31,7 +31,6 @@ const InterceptedSchoolPage = () => {
   const { onDelete, onCreate, onUpdate } = useSchools({ queryKey });
 
   const pathname = usePathname();
-  console.log(pathname);
   if (!user) {
     return null;
   }

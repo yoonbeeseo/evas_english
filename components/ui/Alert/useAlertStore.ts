@@ -4,6 +4,7 @@ export interface AlertButton {
   text?: string;
   onClick?: () => void;
   primary?: boolean;
+  warning?: boolean;
 }
 
 interface Props {

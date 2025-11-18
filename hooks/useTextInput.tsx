@@ -26,18 +26,32 @@ export interface TextInputProps
   pw?: boolean;
 }
 
-const useTextInput = (payload?: {
+function useTextInput<TargetType = string>(payload?: {
   value?: string;
   validator?: (value: string) => string | null;
-}) => {
+  state?: [TargetType, SetAction<TargetType>];
+  target?: keyof TargetType;
+}) {
   const [focused, setFocused] = useState(false);
-  const [value, setValue] = useState(payload?.value ?? "");
+  const [value, setValue] = useState(
+    payload?.state && payload?.target
+      ? (payload.state[0][payload.target] as string)
+      : payload?.value ?? ""
+  );
   const message = useMemo(() => {
     if (payload?.validator) {
-      return payload.validator(value);
+      return payload.validator(
+        payload?.state && payload?.target
+          ? (payload.state[0][payload.target] as string)
+          : value
+      );
     }
-    if (value.length === 0) {
-      return "아무것도 입력되지 않았습니다.";
+    if (
+      payload?.state && payload?.target
+        ? (payload.state[0][payload.target] as string)?.length === 0
+        : value?.length === 0
+    ) {
+      return "아무것도 선택되지 않았습니다.";
     }
     return null;
   }, [value, payload]);
@@ -116,8 +130,27 @@ const useTextInput = (payload?: {
 
   const id = useId();
   const props = useMemo<TextInputBaseProps>(
-    () => ({ value, onChangeText: setValue, focused, setFocused, id, message }),
-    [value, setValue, focused, setFocused, id, message]
+    () => ({
+      value:
+        payload?.state && payload?.target
+          ? (payload.state[0][payload.target] as string)
+          : value,
+      onChangeText:
+        payload?.state && payload?.target
+          ? (value: string) =>
+              payload?.state &&
+              payload?.target &&
+              payload?.state[1]((prev) => ({
+                ...prev,
+                [payload.target as keyof TargetType]: value,
+              }))
+          : setValue,
+      focused,
+      setFocused,
+      id,
+      message,
+    }),
+    [value, setValue, focused, setFocused, id, message, payload]
   );
 
   return {
@@ -130,7 +163,8 @@ const useTextInput = (payload?: {
     focus,
     scrollIntoView,
     ref,
+    message,
   };
-};
+}
 
 export default useTextInput;

@@ -18,3 +18,5 @@ export async function GET(req: NextRequest) {
 
   return Response.json(data);
 }
+
+export async function POST(req: Request) {}

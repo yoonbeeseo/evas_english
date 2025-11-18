@@ -9,7 +9,7 @@ const Alert = () => {
   const { Modal, Container } = useModal();
 
   const Button = useCallback(
-    ({ text, onClick, primary }: AlertButton) => {
+    ({ text, onClick, primary, warning }: AlertButton) => {
       return (
         <button
           type="button"
@@ -21,7 +21,11 @@ const Alert = () => {
           }}
           className={twMerge(
             "bg-transparent flex-1",
-            primary ? "hover:text-blue-500" : ""
+            primary
+              ? "hover:text-blue-500"
+              : warning
+              ? "text-red-300 hover:text-red-500"
+              : ""
           )}
         >
           {text ?? "확인"}
@@ -61,6 +65,7 @@ const Alert = () => {
       <>
         <Modal state={state} handler={hideAlert}>
           <Container className="min-w-50 max-w-100 p-0">
+            {title && <p className="font-bold">{title}</p>}
             <p className="text-center leading-6 p-5">{message}</p>
             <div className="border-t border-gray-200 row">
               {buttons.length === 0
