@@ -5,8 +5,16 @@ import AddSchoolButton from "./AddSchoolButton";
 const SchoolPage = async ({ params }: { params: Promise<{ uid: string }> }) => {
   const { uid } = await params;
   const res = await fetch(`${process.env.API_URL}/school?uid=${uid}`);
-  const schools = (await res.json()) as School[];
+  const data = await res.json();
+  if (data.message || !uid) {
+    return (
+      <h1>
+        Error:{data.message} {uid}
+      </h1>
+    );
+  }
 
+  const schools: School[] = [...data];
   return (
     <div className="container">
       <div className="row items-center">

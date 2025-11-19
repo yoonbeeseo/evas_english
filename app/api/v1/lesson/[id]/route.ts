@@ -1,41 +1,46 @@
 import { Collection, supabase } from "@/lib";
 import { NextRequest } from "next/server";
 
-const ref = supabase.from(Collection.SCHOOLS);
+const ref = supabase.from(Collection.LESSONS);
 
-export async function GET(
+export const GET = async (
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+) => {
   const uid = req.nextUrl.searchParams.get("uid");
-  const { id } = await params;
   if (!uid) {
-    return Response.json({ message: "No uid" }, { status: 401 });
+    return Response.json({ messge: "No uid" }, { status: 401 });
   }
+  const { id } = await params;
   if (!id) {
-    return Response.json({ message: "No school id" }, { status: 401 });
+    return Response.json({ message: "No lesson id" }, { status: 402 });
   }
 
   const { data, error } = await ref.select("*").match({ uid, id }).single();
+
   if (error) {
     return Response.json({ message: error.message }, { status: 501 });
   }
-  return Response.json(data);
-}
 
-export async function PUT(
+  return Response.json(data);
+};
+
+export const PUT = async (
   req: NextRequest,
-  { params }: { params: Promise<{ id: number | string }> }
-) {
+  { params }: { params: Promise<{ id: string }> }
+) => {
   const uid = req.nextUrl.searchParams.get("uid");
-  const { id } = await params;
   if (!uid) {
-    return Response.json({ message: "No uid" }, { status: 401 });
+    return Response.json({ messge: "No uid" }, { status: 401 });
   }
-  const payload = (await req.json()) as SchoolPayload;
+  const { id } = await params;
+  if (!id) {
+    return Response.json({ message: "No lesson id" }, { status: 402 });
+  }
+  const payload = (await req.json()) as LessonPayload;
 
   const { data, error } = await ref
-    .update({ ...payload, uid })
+    .update({ ...payload, updated_at: new Date() })
     .match({ uid, id })
     .select("*")
     .single();
@@ -43,25 +48,24 @@ export async function PUT(
   if (error) {
     return Response.json({ message: error.message }, { status: 501 });
   }
-
   return Response.json(data);
-}
+};
 
-export async function DELETE(
+export const DELETE = async (
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+) => {
   const uid = req.nextUrl.searchParams.get("uid");
   if (!uid) {
-    return Response.json({ message: "No uid" }, { status: 401 });
+    return Response.json({ messge: "No uid" }, { status: 401 });
   }
   const { id } = await params;
   if (!id) {
-    return Response.json({ message: "No school id" }, { status: 401 });
+    return Response.json({ message: "No lesson id" }, { status: 402 });
   }
   const { error } = await ref.delete().match({ uid, id });
   if (error) {
     return Response.json({ message: error.message }, { status: 501 });
   }
   return Response.json({ success: true });
-}
+};

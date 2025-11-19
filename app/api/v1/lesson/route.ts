@@ -1,67 +1,47 @@
 import { Collection, supabase } from "@/lib";
 import { NextRequest } from "next/server";
 
-const ref = supabase.from(Collection.SCHOOLS);
+const ref = supabase.from(Collection.LESSONS);
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const GET = async (req: NextRequest) => {
   const uid = req.nextUrl.searchParams.get("uid");
-  const { id } = await params;
   if (!uid) {
     return Response.json({ message: "No uid" }, { status: 401 });
   }
-  if (!id) {
-    return Response.json({ message: "No school id" }, { status: 401 });
-  }
 
-  const { data, error } = await ref.select("*").match({ uid, id }).single();
+  const { data, error } = await ref.select("*").eq("uid", uid);
   if (error) {
     return Response.json({ message: error.message }, { status: 501 });
   }
-  return Response.json(data);
-}
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: number | string }> }
-) {
+  return Response.json(data);
+};
+
+export const POST = async (req: NextRequest) => {
   const uid = req.nextUrl.searchParams.get("uid");
-  const { id } = await params;
   if (!uid) {
     return Response.json({ message: "No uid" }, { status: 401 });
   }
-  const payload = (await req.json()) as SchoolPayload;
+  const payload = (await req.json()) as LessonPayload;
 
   const { data, error } = await ref
-    .update({ ...payload, uid })
-    .match({ uid, id })
+    .insert({ ...payload, uid })
     .select("*")
     .single();
-
   if (error) {
     return Response.json({ message: error.message }, { status: 501 });
   }
-
   return Response.json(data);
-}
+};
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const DELETE = async (req: NextRequest) => {
   const uid = req.nextUrl.searchParams.get("uid");
   if (!uid) {
     return Response.json({ message: "No uid" }, { status: 401 });
   }
-  const { id } = await params;
-  if (!id) {
-    return Response.json({ message: "No school id" }, { status: 401 });
-  }
-  const { error } = await ref.delete().match({ uid, id });
+  const { error } = await ref.delete().eq("uid", uid);
   if (error) {
     return Response.json({ message: error.message }, { status: 501 });
   }
   return Response.json({ success: true });
-}
+};

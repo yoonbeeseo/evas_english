@@ -9,9 +9,10 @@ export async function GET(req: NextRequest) {
     return Response.json({ message: "No uid" }, { status: 401 });
   }
 
+  console.log({ uid }, typeof uid);
   const { data, error } = await ref.select("*").eq("uid", uid);
-
   if (error) {
+    console.log(error.message);
     return Response.json({ message: error.message }, { status: 501 });
   }
 

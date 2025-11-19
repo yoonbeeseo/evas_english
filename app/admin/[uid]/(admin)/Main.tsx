@@ -30,7 +30,7 @@ const Main = ({
     { name: "학부모관리", target: "명", data: parents, href: "/parent" },
   ];
   return (
-    <>
+    <div className="grid gap-4 md:grid-cols-2">
       {data.map(({ name, target, data, href }) => (
         <Container key={name}>
           <div className="row items-center border-b pb-2 border-gray-200">
@@ -74,7 +74,7 @@ const Main = ({
           </ul>
         </Container>
       ))}
-    </>
+    </div>
   );
 };
 

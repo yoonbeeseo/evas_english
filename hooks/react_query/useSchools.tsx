@@ -1,6 +1,21 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useSchools = ({ queryKey, uid }: { queryKey: any[]; uid: string }) => {
+  const { data, isPending, error } = useQuery({
+    queryKey,
+    queryFn: async (): Promise<School[]> => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/school?uid=${uid}`
+      );
+
+      const schools = await res.json();
+      if (!res.ok) {
+        throw new Error(schools.message);
+      }
+      return schools ?? [];
+    },
+  });
+
   const queryClient = useQueryClient();
 
   const caching = () => queryClient.invalidateQueries({ queryKey });
@@ -9,20 +24,17 @@ const useSchools = ({ queryKey, uid }: { queryKey: any[]; uid: string }) => {
     mutationFn: async ({
       method,
       payload,
-    }: {
-      method: ActionMethod;
-      payload: string | number | SchoolPayload | School;
-    }) => {
-      let url = `http://localhost:3000/api/v1/school?uid=${uid}`;
+    }: MutationFuncProps<SchoolPayload, School>) => {
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/school`;
       if (
         (method === "DELETE" && typeof payload === "string") ||
         typeof payload === "number"
       ) {
-        url = url + "/" + payload;
+        url = url + "/" + payload + `?uid=${uid}`;
       } else if (method !== "POST") {
-        url = `http://localhost:3000/api/v1/school/${
-          (payload as School).id
-        }?uid=${uid}`;
+        url = `${url}/${(payload as School).id}?uid=${uid}`;
+      } else {
+        url = url + `?uid=${uid}`;
       }
 
       const res = await fetch(url, {
@@ -62,6 +74,9 @@ const useSchools = ({ queryKey, uid }: { queryKey: any[]; uid: string }) => {
     onCreate,
     onUpdate,
     onPatch,
+    isPending,
+    error,
+    data,
   };
 };
 

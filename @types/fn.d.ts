@@ -5,3 +5,8 @@ interface ModalProps<T> {
   onCancel?: () => void;
   onSuccess?: () => void;
 }
+
+interface ListItemProps<T = any> {
+  index: number;
+  item: T;
+}

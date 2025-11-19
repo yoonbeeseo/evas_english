@@ -18,7 +18,7 @@
   }
 
   div.row {
-    @apply flex-row;
+    @apply flex-row items-center;
   }
 }
 
