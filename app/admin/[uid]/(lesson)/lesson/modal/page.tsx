@@ -1,7 +1,7 @@
-import React from "react";
+import LessonModal from "../../LessonModal";
 
 const LessonModalPage = () => {
-  return <div>LessonModalPage</div>;
+  return <LessonModal />;
 };
 
 export default LessonModalPage;

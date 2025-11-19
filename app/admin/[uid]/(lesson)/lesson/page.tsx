@@ -1,28 +1,16 @@
-import { AdminComponent } from "@/components/ui/feature";
-import { IoAdd } from "react-icons/io5";
-import LessonItem from "../LessonItem";
+import LessonComponent from "../LessonComponent";
 
 const LessonPage = async ({ params }: { params: Promise<{ uid: string }> }) => {
+  let isPending = true;
   const { uid } = await params;
   const res = await fetch(process.env.API_URL + "/lesson?uid=" + uid);
   const data = await res.json();
+  isPending = false;
   if (!res.ok) {
     return <h1>{data.message}</h1>;
   }
   return (
-    <AdminComponent>
-      <div className="row">
-        <AdminComponent.Back className="flex-1">클래스관리</AdminComponent.Back>
-        <AdminComponent.Link href="lesson/modal">
-          클래스 추가하기
-          <IoAdd className="text-lg" />
-        </AdminComponent.Link>
-      </div>
-      <AdminComponent.List
-        data={data}
-        Component={(props) => <LessonItem {...props} uid={uid} />}
-      />
-    </AdminComponent>
+    <LessonComponent data={data} error={data} uid={uid} isPending={isPending} />
   );
 };
 

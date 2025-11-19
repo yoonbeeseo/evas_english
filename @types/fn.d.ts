@@ -6,6 +6,13 @@ interface ModalProps<T> {
   onSuccess?: () => void;
 }
 
+interface ModalPayloadProps<T = any> {
+  payload?: T;
+  isStudent?: boolean;
+  onCancel?: () => void;
+  onSuccess?: () => void;
+}
+
 interface ListItemProps<T = any> {
   index: number;
   item: T;

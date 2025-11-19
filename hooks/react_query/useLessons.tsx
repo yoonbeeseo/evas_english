@@ -8,7 +8,7 @@ export default function useLessons({ uid }: { uid?: string | string[] }) {
     queryKey,
     queryFn: async (): Promise<Lesson[]> => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/lessons?uid=${uid}`
+        `${process.env.NEXT_PUBLIC_API_URL}/lesson?uid=${uid}`
       );
       const data = await res.json();
       if (res.ok) {
@@ -16,6 +16,7 @@ export default function useLessons({ uid }: { uid?: string | string[] }) {
       }
       return data ?? [];
     },
+    initialData: [],
   });
 
   const mutation = useMutation({

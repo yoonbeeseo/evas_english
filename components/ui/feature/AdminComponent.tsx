@@ -21,7 +21,7 @@ const List = ({
   emptyMessage,
   ...props
 }: ComponentProps<"ul"> & {
-  data: any[];
+  data?: any[];
   Component: (props: ListItemProps) => ReactNode;
   emptyMessage?: string;
 }) => (

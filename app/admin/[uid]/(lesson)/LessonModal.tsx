@@ -1,6 +1,9 @@
-import React from "react";
-
-const LessonModal = () => {
+const LessonModal = ({
+  isStudent,
+  onCancel,
+  onSuccess,
+  payload,
+}: ModalPayloadProps<Lesson>) => {
   return <div>LessonModal</div>;
 };
 
