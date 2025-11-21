@@ -24,6 +24,7 @@ export interface TextInputProps
     TextInputBaseProps {
   label?: string;
   pw?: boolean;
+  container?: ComponentProps<"div">;
 }
 
 function useTextInput<TargetType = string>(payload?: {
@@ -79,9 +80,10 @@ function useTextInput<TargetType = string>(payload?: {
       alwaysDisplayMessage,
       message,
       pw,
+      container,
       ...props
     }: TextInputProps) => (
-      <div className="gap-1">
+      <div {...container} className={twMerge("gap-1", container?.className)}>
         {label && (
           <label
             htmlFor={props?.id}

@@ -42,4 +42,12 @@
   .line {
     @apply bg-gray-200 h-[1px];
   }
+
+  .item {
+    @apply hover:bg-gray-50 pr-1;
+  }
+
+  .item .icon {
+    @apply hover:bg-gray-100;
+  }
 }

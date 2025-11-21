@@ -9,7 +9,7 @@ const InterceptedLessonPage = () => {
   const { data, error, isPending } = useLessons({ uid });
   return (
     <LessonComponent
-      data={data}
+      data={data ?? []}
       error={error}
       isPending={isPending}
       uid={uid as string}

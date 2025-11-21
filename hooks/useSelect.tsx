@@ -12,7 +12,8 @@ import {
 import { twMerge } from "tailwind-merge";
 
 interface SelectProps {
-  data: string[];
+  data: (string | number)[];
+  container?: ComponentProps<"div">;
 }
 interface SelectPayload extends ComponentProps<"select"> {
   focused: boolean;
@@ -106,9 +107,10 @@ export default function useSelect<T = string>(payload?: Payload<T>) {
       message,
       label,
       onSubmitEditing,
+      container,
       ...props
     }: SelectProps & SelectPayload) => (
-      <div>
+      <div {...container}>
         {label && (
           <label
             htmlFor={props?.id}

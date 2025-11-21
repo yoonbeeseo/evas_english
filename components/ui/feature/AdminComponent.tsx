@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps, Fragment, ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import { BackButton, LinkButton } from "./AdminButtons";
 
@@ -19,21 +19,36 @@ const List = ({
   data,
   Component,
   emptyMessage,
+  withLine,
+  href,
   ...props
 }: ComponentProps<"ul"> & {
   data?: any[];
   Component: (props: ListItemProps) => ReactNode;
   emptyMessage?: string;
+  withLine?: boolean;
+  href?: string;
 }) => (
-  <ul {...props} className={twMerge("grid gap-2", props?.className)}>
-    {data &&
-      (data.length > 0 ? (
-        data?.map((item, index) => (
+  <ul
+    {...props}
+    className={twMerge("grid gap-2", withLine && "gap-0", props?.className)}
+  >
+    {!data || data.length === 0 ? (
+      <AdminComponent.Link href={href ?? "modal/lesson"}>
+        {emptyMessage ?? "Nothing in the array"}
+      </AdminComponent.Link>
+    ) : (
+      data?.map((item, index) =>
+        withLine ? (
+          <Fragment key={index}>
+            <Component index={index} item={item} />
+            {index < data.length - 1 && <div className="line" />}
+          </Fragment>
+        ) : (
           <Component key={index} index={index} item={item} />
-        ))
-      ) : (
-        <h1>{emptyMessage ?? "Nothing in the array"}</h1>
-      ))}
+        )
+      )
+    )}
     {props?.children}
   </ul>
 );

@@ -56,7 +56,7 @@ const Main = ({
                     <div className="icon size-8 items-center justify-center text-gray-500">
                       {target === "명" ? (
                         <IoPersonCircleOutline />
-                      ) : target.includes("클래스") ? (
+                      ) : name.includes("클래스") ? (
                         <IoEaselOutline />
                       ) : (
                         <IoBusinessOutline />

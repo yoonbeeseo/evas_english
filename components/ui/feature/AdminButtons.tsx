@@ -14,6 +14,7 @@ export const BackButton = (props: ComponentProps<"button">) => {
       {...props}
       className={twMerge("bg-transparent px-0 justify-start", props?.className)}
       onClick={props?.onClick ?? router.back}
+      type="button"
     >
       <IoChevronBack />
       {props?.children}

@@ -10,7 +10,12 @@ const LessonPage = async ({ params }: { params: Promise<{ uid: string }> }) => {
     return <h1>{data.message}</h1>;
   }
   return (
-    <LessonComponent data={data} error={data} uid={uid} isPending={isPending} />
+    <LessonComponent
+      data={data}
+      error={data?.message ?? null}
+      uid={uid}
+      isPending={isPending}
+    />
   );
 };
 

@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export default function useLessons({ uid }: { uid?: string | string[] }) {
+export default function useLessons({
+  uid,
+  initialData,
+}: {
+  uid?: string | string[];
+  initialData?: any[];
+}) {
   const queryKey = ["lesson", uid];
   const queryClient = useQueryClient();
   const caching = () => queryClient.invalidateQueries({ queryKey });
@@ -11,12 +17,12 @@ export default function useLessons({ uid }: { uid?: string | string[] }) {
         `${process.env.NEXT_PUBLIC_API_URL}/lesson?uid=${uid}`
       );
       const data = await res.json();
-      if (res.ok) {
+      if (!res.ok) {
         throw new Error(data.mesage);
       }
       return data ?? [];
     },
-    initialData: [],
+    initialData,
   });
 
   const mutation = useMutation({
@@ -57,6 +63,8 @@ export default function useLessons({ uid }: { uid?: string | string[] }) {
     await mutation.mutateAsync({ method: "POST", payload });
   const onPATCH = async (payload: LessonPayload) =>
     await mutation.mutateAsync({ method: "PATCH", payload });
+  const onPUT = async (payload: LessonPayload) =>
+    await mutation.mutateAsync({ method: "PUT", payload });
   const onDELETE = async (payload: string | number) =>
     await mutation.mutateAsync({ method: "DELETE", payload });
 
@@ -67,5 +75,6 @@ export default function useLessons({ uid }: { uid?: string | string[] }) {
     data,
     isPending,
     error,
+    onPUT,
   };
 }

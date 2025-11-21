@@ -24,3 +24,15 @@ export const schoolLevels: SchoolLevel[] = [
   "5학년",
   "6학년",
 ];
+
+export const lessonLengths: number[] = Array.from(
+  { length: 100 },
+  (_, i) => (i + 1) * 5
+);
+
+export const lessonCounts: number[] = Array.from(
+  { length: 7 },
+  (_, i) => i + 1
+);
+
+export const subjects: string[] = ["영어"];
