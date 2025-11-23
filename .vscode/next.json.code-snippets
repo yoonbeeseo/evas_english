@@ -1,0 +1,34 @@
+{
+  "Next Api Router Respose": {
+    "prefix": "nars",
+    "body": "return Response.json(${1}${2:, {status:${0}}})"
+  },
+  "Next Api Router Supabase Error Response": {
+    "prefix": "narser",
+    "body": [
+      "if(error){",
+      "\treturn Response.json({message:error.message},{status:${0:501}})",
+      "}"
+    ]
+  },
+  "Next Api Router Params": {
+    "prefix": "narp",
+    "body": "{params}:{params:Promise<{${0:}}>}"
+  },
+  "Next Api Router Params Check": {
+    "prefix": "narpc",
+    "body": [
+      "if(${1}){",
+      "\treturn Response.json({message:\"${2:message}\"},{status:${0:401}})",
+      "}"
+    ]
+  },
+  "Next Api Router Params UID": {
+    "prefix": "narpuid",
+    "body": "const { uid } = req.nextUrl.searchParams.get(\"uid\")"
+  },
+  "Next Api Router Params ID": {
+    "prefix": "narpid",
+    "body": "const { id } = req.nextUrl.searchParams.get(\"id\")"
+  }
+}

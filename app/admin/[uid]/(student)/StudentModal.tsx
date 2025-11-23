@@ -1,7 +1,8 @@
 "use client";
 
 import { useForm, useTextInput } from "@/hooks";
-import { useMemo, useState } from "react";
+import { convertDateToString } from "@/lib/convertor";
+import { useMemo, useState, useEffect } from "react";
 
 const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
   const initialState = useMemo<Student | StudentPayload>(
@@ -11,17 +12,55 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
   const state = useState(initialState);
 
   const Name = useTextInput();
-  const Dob = useTextInput();
+  const Dob = useTextInput({
+    state,
+    target: "dob",
+    value: convertDateToString(
+      new Date(
+        `${new Date().getFullYear() - 10}/${
+          new Date().getMonth() + 1
+        }/${new Date().getDate()}`
+      )
+    ),
+  });
+
   const Mobile = useTextInput();
 
   const { Form, handler, SubmitArea, CancelButton, SubmitButton } = useForm();
 
+  const [date, setDate] = useState(
+    convertDateToString(
+      new Date(
+        `${new Date().getFullYear() - 10}/${
+          new Date().getMonth() + 1
+        }/${new Date().getDate()}`
+      )
+    )
+  );
+
+  useEffect(() => console.log(date), [date]);
+
   return (
     <Form>
-      <div className="row">
-        <p>name</p>
-        <p>dob</p>
+      <div className="row gap-2 items-start">
+        <Name.TextInput
+          {...Name.props}
+          label="이름"
+          container={{ className: "flex-2" }}
+        />
+        <Dob.TextInput
+          {...Dob.props}
+          label="생년월일"
+          container={{ className: "flex-1" }}
+          type="date"
+          onChange={(e) =>
+            state[1]((prev) => ({ ...prev, dob: e.target.value }))
+          }
+        />
       </div>
+      주소
+      <div>학부모</div>
+      <div>수강수업</div>
     </Form>
   );
 };

@@ -1,10 +1,13 @@
+import { useParams } from "@/node_modules/next/navigation";
 import StudentComponent from "../StudentComponent";
 
 const InterceptedStudentPage = () => {
+  const { uid } = useParams();
+  console.log(uid);
   return (
     <>
-      InterceptedStudentPage
-      <StudentComponent />
+      InterceptedStudentPage:{uid}
+      <StudentComponent uid={uid} />
     </>
   );
 };

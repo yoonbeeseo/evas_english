@@ -102,7 +102,12 @@ function useTextInput<TargetType = string>(payload?: {
           className={twMerge(
             "outline-none border border-gray-200 px-2 h-12 rounded focus:caret-blue-500 focus:border-blue-500 bg-gray-50 focus:bg-transparent"
           )}
-          onChange={(e) => onChangeText(e.target.value)}
+          onChange={(e) => {
+            onChangeText(e.target.value);
+            if (props?.onChange) {
+              props.onChange(e);
+            }
+          }}
           onFocus={(e) => {
             if (props?.onFocus) {
               return props.onFocus(e);
