@@ -12,3 +12,7 @@ export function convertDateToString(date: Date, format?: "YYYY-MM-DD"): string {
       return `${y}-${m}-${d}`;
   }
 }
+
+export function convertStringToDate(string: string): Date {
+  return new Date(string);
+}

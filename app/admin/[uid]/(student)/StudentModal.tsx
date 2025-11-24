@@ -1,8 +1,9 @@
 "use client";
 
-import { useForm, useTextInput } from "@/hooks";
+import { useForm, useModal, useTextInput } from "@/hooks";
 import { convertDateToString } from "@/lib/convertor";
 import { useMemo, useState, useEffect } from "react";
+import AddressModal from "./AddressModal";
 
 const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
   const initialState = useMemo<Student | StudentPayload>(
@@ -11,7 +12,7 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
   );
   const state = useState(initialState);
 
-  const Name = useTextInput();
+  const Name = useTextInput({ state, target: "name" });
   const Dob = useTextInput({
     state,
     target: "dob",
@@ -25,20 +26,10 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
   });
 
   const Mobile = useTextInput();
+  const Add = useModal();
+  const Par = useModal();
 
   const { Form, handler, SubmitArea, CancelButton, SubmitButton } = useForm();
-
-  const [date, setDate] = useState(
-    convertDateToString(
-      new Date(
-        `${new Date().getFullYear() - 10}/${
-          new Date().getMonth() + 1
-        }/${new Date().getDate()}`
-      )
-    )
-  );
-
-  useEffect(() => console.log(date), [date]);
 
   return (
     <Form>
@@ -58,7 +49,14 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
           }
         />
       </div>
-      주소
+      <button type="button" onClick={Add.handler}>
+        click here to search
+      </button>
+      <Add.Modal {...Add.props}>
+        <Add.Container>
+          <AddressModal />
+        </Add.Container>
+      </Add.Modal>
       <div>학부모</div>
       <div>수강수업</div>
     </Form>
