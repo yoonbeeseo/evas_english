@@ -31,6 +31,15 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
 
   const { Form, handler, SubmitArea, CancelButton, SubmitButton } = useForm();
 
+  console.log(
+    convertDateToString(
+      new Date(
+        `${new Date().getFullYear() - 10}/${
+          new Date().getMonth() + 1
+        }/${new Date().getDate()}`
+      )
+    )
+  );
   return (
     <Form>
       <div className="row gap-2 items-start">
@@ -38,17 +47,28 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
           {...Name.props}
           label="이름"
           container={{ className: "flex-2" }}
+          placeholder="예) 윤비서"
         />
         <Dob.TextInput
           {...Dob.props}
           label="생년월일"
           container={{ className: "flex-1" }}
           type="date"
-          onChange={(e) =>
-            state[1]((prev) => ({ ...prev, dob: e.target.value }))
-          }
+          defaultValue={convertDateToString(
+            new Date(
+              `${new Date().getFullYear() - 10}/${
+                new Date().getMonth() + 1
+              }/${new Date().getDate()}`
+            )
+          )}
         />
       </div>
+      <Mobile.TextInput
+        {...Mobile.props}
+        label="연락처"
+        placeholder="예) 010-1234-1234"
+        type="tel"
+      />
       <button type="button" onClick={Add.handler}>
         click here to search
       </button>

@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "push:update": "git add . && git commit -m 'update' && git push origin main",
+    "reset:hard": "git pull origin main && git reset --hard origin/main"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.80.0",
