@@ -17,14 +17,16 @@ export interface TextInputBaseProps {
   onChangeText: (value: string) => void;
   alwaysDisplayMessage?: boolean;
   message: string | null;
+  id: string;
 }
 
 export interface TextInputProps
-  extends Omit<ComponentProps<"input">, "value">,
+  extends Omit<ComponentProps<"input">, "value" | "id">,
     TextInputBaseProps {
   label?: string;
   pw?: boolean;
   container?: ComponentProps<"div">;
+  onSubmitEditing?: () => void;
 }
 
 function useTextInput<TargetType = string>(payload?: {
@@ -81,6 +83,7 @@ function useTextInput<TargetType = string>(payload?: {
       message,
       pw,
       container,
+      onSubmitEditing,
       ...props
     }: TextInputProps) => (
       <div {...container} className={twMerge("gap-1", container?.className)}>
@@ -121,6 +124,18 @@ function useTextInput<TargetType = string>(payload?: {
             setFocused(false);
           }}
           placeholder={props?.placeholder ?? "이곳에 입력하세요."}
+          onKeyDown={(e) => {
+            if (props?.onKeyDown) {
+              props?.onKeyDown(e);
+            }
+            if (
+              (e.key === "Tab" || e.key === "Enter") &&
+              !e.nativeEvent.isComposing &&
+              onSubmitEditing
+            ) {
+              onSubmitEditing();
+            }
+          }}
         />
         {message && (alwaysDisplayMessage || focused) && (
           <label

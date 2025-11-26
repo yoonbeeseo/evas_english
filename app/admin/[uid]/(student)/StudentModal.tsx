@@ -31,15 +31,6 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
 
   const { Form, handler, SubmitArea, CancelButton, SubmitButton } = useForm();
 
-  console.log(
-    convertDateToString(
-      new Date(
-        `${new Date().getFullYear() - 10}/${
-          new Date().getMonth() + 1
-        }/${new Date().getDate()}`
-      )
-    )
-  );
   return (
     <Form>
       <div className="row gap-2 items-start">
@@ -69,9 +60,14 @@ const StudentModal = ({ payload }: ModalPayloadProps<Student>) => {
         placeholder="예) 010-1234-1234"
         type="tel"
       />
-      <button type="button" onClick={Add.handler}>
-        click here to search
-      </button>
+      <div>
+        <label htmlFor="address_button" className="label">
+          주소 찾기
+        </label>
+        <button type="button" onClick={Add.handler} id="address_button">
+          click here to search
+        </button>
+      </div>
       <Add.Modal {...Add.props}>
         <Add.Container>
           <AddressModal />

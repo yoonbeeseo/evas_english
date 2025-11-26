@@ -50,4 +50,8 @@
   .item .icon {
     @apply hover:bg-gray-100;
   }
+
+  .label {
+    @apply text-xs text-gray-500;
+  }
 }
