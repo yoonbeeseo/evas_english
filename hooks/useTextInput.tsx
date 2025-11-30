@@ -17,10 +17,11 @@ export interface TextInputBaseProps {
   onChangeText: (value: string) => void;
   alwaysDisplayMessage?: boolean;
   message: string | null;
+  id: string;
 }
 
 export interface TextInputProps
-  extends Omit<ComponentProps<"input">, "value">,
+  extends Omit<ComponentProps<"input">, "value" | "id">,
     TextInputBaseProps {
   label?: string;
   pw?: boolean;
