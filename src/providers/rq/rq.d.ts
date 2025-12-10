@@ -10,8 +10,7 @@ type SchoolSort =
   | "중학교"
   | "고등학교"
   | "대학교"
-  | "직장"
-  | "직접입력";
+  | "직장";
 
 type SchoolLevel = "1학년" | "2학년" | "3학년" | "4학년" | "5학년" | "6학년";
 interface School {
@@ -32,13 +31,7 @@ interface PatchProps<T> {
   id: string;
 }
 
-type LessonSort =
-  | "유치부"
-  | "초등부"
-  | "중등부"
-  | "고등부"
-  | "성인부"
-  | "직접입력";
+type LessonSort = "유치부" | "초등부" | "중등부" | "고등부" | "성인부";
 
 interface Lesson {
   name: string;
@@ -48,9 +41,31 @@ interface Lesson {
   updated_at: Date;
   bizinfo_id: string;
   subject: string;
-  countPerWeek: number;
-  lengthPerLesson: number;
+  countPerWeek: string;
+  lengthPerLesson: string;
   price: number;
 }
 
 type LessonPayload = DBPayload<Lesson, "bizinfo_id">;
+
+interface Contact {
+  isMobile: boolean;
+  value: string;
+}
+
+type ParentTitle = "아버님" | "어머님" | "할아버지" | "할머니" | "직접입력";
+
+interface Parent {
+  name: string;
+  bizinfo_ids: string[];
+  id: string;
+  contacts: Contact[];
+  title: ParentTitle | "";
+  has_privacy_policy_on_behalf: null | Date;
+  has_privacy_policy: null | Date;
+  student_ids: string[];
+  created_at: Date;
+  updated_at: Date;
+}
+
+type ParentPayload = DBPayload<Parent>;

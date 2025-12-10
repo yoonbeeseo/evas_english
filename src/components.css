@@ -36,7 +36,7 @@
   }
 
   button.admin {
-    @apply bg-transparent flex-col gap-2 items-center overflow-hidden pt-2 text-Gray hover:text-primary min-w-10;
+    @apply bg-transparent flex-col gap-2 items-center overflow-hidden pt-2 text-Gray hover:text-primary min-w-10 max-w-10;
   }
 
   button.admin svg {

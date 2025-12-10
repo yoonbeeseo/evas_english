@@ -1,4 +1,9 @@
-import { useEffect, useState, type PropsWithChildren } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from "react";
 import { Auth } from "./Auth.use";
 import { auth } from "../../lib/firebase";
 import { Loader } from "../../components/ui";
@@ -35,8 +40,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  useEffect(() => console.log(user, initialized), [user, initialized]);
-
   const [isOnline, setIsOnline] = useState(false);
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -51,8 +54,16 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
+  const [bizinfo, setBizinfo] = useState<null | Bizinfo>(null);
+  const selectBizinfo = useCallback(
+    (payload: Bizinfo) => setBizinfo(payload),
+    []
+  );
+
   return (
-    <Auth.Provider value={{ user, initialized, isOnline }}>
+    <Auth.Provider
+      value={{ user, initialized, isOnline, bizinfo, selectBizinfo }}
+    >
       {!isOnline && "No Internet connection"}
       {initialized ? children : <Loader />}
     </Auth.Provider>

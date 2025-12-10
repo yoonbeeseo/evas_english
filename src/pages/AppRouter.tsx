@@ -32,17 +32,17 @@ export default function AppRouter() {
 }
 
 function Routers() {
-  const { user } = useAtuh();
+  const auth = useAtuh();
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout user={user} />}>
+        <Route path="/" element={<Layout user={auth.user} />}>
           <Route index Component={Home} />
           <Route path="auth">
             <Route index Component={AuthHome} />
             <Route path=":id" Component={Test} />
           </Route>
-          {user && (
+          {auth.user && (
             <Route path="admin" Component={AdminLayout}>
               <Route index Component={AdminHome} />
               <Route path="students">
@@ -51,12 +51,12 @@ function Routers() {
                 <Route path=":sid" Component={Test} />
               </Route>
               <Route path="schools">
-                <Route index element={<SchoolHome user={user} />} />
+                <Route index element={<SchoolHome {...auth} />} />
                 <Route path="new" element={<SchoolNew />} />
                 <Route path=":school_id" element={<SchoolDetail />} />
               </Route>
               <Route path="lessons">
-                <Route index element={<LessonHome user={user} />} />
+                <Route index element={<LessonHome {...auth} />} />
                 <Route path="new" element={<LessonNew />} />
                 <Route path=":lesson_id" element={<LessonDetail />} />
               </Route>

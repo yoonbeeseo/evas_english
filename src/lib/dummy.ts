@@ -6,7 +6,6 @@ export const schoolSorts: SchoolSort[] = [
   "고등학교",
   "대학교",
   "직장",
-  "직접입력",
 ];
 
 export const schoolLevels: SchoolLevel[] = [
@@ -24,5 +23,4 @@ export const lessonSorts: LessonSort[] = [
   "중등부",
   "고등부",
   "성인부",
-  "직접입력",
 ];

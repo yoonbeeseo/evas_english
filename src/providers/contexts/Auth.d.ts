@@ -93,3 +93,11 @@ interface SelectData<T = any> {
   value: T;
   text: string;
 }
+
+interface AuthContext {
+  user: null | User;
+  initialized: boolean;
+  isOnline: boolean;
+  bizinfo: null | Bizinfo;
+  selectBizinfo: PropsFunc<Bizinfo>;
+}

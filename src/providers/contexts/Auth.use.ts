@@ -1,15 +1,11 @@
 import { createContext, use } from "react";
 
-interface Props {
-  user: null | User;
-  initialized: boolean;
-  isOnline: boolean;
-}
-
-const initialState: Props = {
+const initialState: AuthContext = {
   user: null,
   initialized: false,
   isOnline: false,
+  bizinfo: null,
+  selectBizinfo: () => {},
 };
 
 export const Auth = createContext(initialState);

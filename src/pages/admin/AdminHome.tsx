@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Spinner } from "../../components/ui";
 import { useAtuh } from "../../providers/contexts/Auth.use";
 import { useLessons, useSchools } from "../../providers/rq";
@@ -7,59 +7,45 @@ import { IoAdd, IoBusinessOutline, IoEaselOutline } from "react-icons/io5";
 import { Link } from "react-router";
 
 const AdminHome = () => {
-  const { user } = useAtuh();
+  const { user, selectBizinfo, bizinfo } = useAtuh();
 
-  const [target, setTarget] = useState<null | Bizinfo>(
-    user?.bizinfos[0] ?? null
-  );
-
-  const School = useSchools(user, target?.id!);
-  const Lesson = useLessons(user, target?.id!);
+  const School = useSchools(user, bizinfo?.id!);
+  const Lesson = useLessons(user, bizinfo?.id!);
 
   return (
     <div className="p-4 gap-2">
       <div className="flex-row gap-1">
         {user?.bizinfos.map((bizinfo) => (
           <button
-            onClick={() => setTarget(bizinfo)}
+            onClick={() => selectBizinfo(bizinfo)}
             key={bizinfo.id}
             className={twMerge(
               "label border p-1 bg-white",
-              target?.id === bizinfo.id && "bg-primary text-white"
+              bizinfo?.id === bizinfo.id && "bg-primary text-white"
             )}
           >
             {bizinfo.name}
           </button>
         ))}
       </div>
-      {target && (
+      {bizinfo && (
         <div className="container rounded border">
-          <h1>{target.name}</h1>
+          <h1>{bizinfo.name}</h1>
           <div className="gap-1">
             <p className="label">
-              {target.address.roadAddrPart1}, {target.address.rest}
+              {bizinfo.address.roadAddrPart1}, {bizinfo.address.rest}
             </p>
-            <p>{target.ceo} 원장님</p>
+            <p>{bizinfo.ceo} 원장님</p>
           </div>
         </div>
       )}
       <Section
-        bizinfo_id={target?.id!}
+        bizinfo_id={bizinfo?.id!}
         isPending={School.isPending}
-        data={
-          School.data
-            ? [
-                ...School.data,
-                ...School.data,
-                ...School.data,
-                ...School.data,
-                ...School.data,
-              ]
-            : []
-        }
+        data={School.data ?? []}
         title="학교목록"
         message="Add School"
-        Component={({ item, index }: MapItemProps<School>) => (
+        Component={({ item }: MapItemProps<School>) => (
           <button className="admin">
             <IoBusinessOutline />
             <p>{item.name}</p>
@@ -68,25 +54,15 @@ const AdminHome = () => {
         to="schools"
       />
       <Section
-        bizinfo_id={target?.id!}
+        bizinfo_id={bizinfo?.id!}
         isPending={Lesson.isPending}
-        data={
-          Lesson.data
-            ? [
-                ...Lesson.data,
-                ...Lesson.data,
-                ...Lesson.data,
-                ...Lesson.data,
-                ...Lesson.data,
-              ]
-            : []
-        }
+        data={Lesson.data ?? []}
         title="클래스목록"
         message="Add Lesson"
-        Component={({ item, index }: MapItemProps<Lesson>) => (
+        Component={({ item }: MapItemProps<Lesson>) => (
           <button className="admin">
             <IoEaselOutline />
-            <p>{item.name}</p>
+            <p>{item.name.split("둔산 에바즈")[1]}</p>
           </button>
         )}
         to="lessons"

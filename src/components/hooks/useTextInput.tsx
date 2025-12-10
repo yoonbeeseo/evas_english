@@ -54,8 +54,6 @@ export default function useTextInput<T = any>(payload?: Payload<T>) {
     return null;
   }, [payload, value]);
 
-  console.log(value);
-
   const props = useMemo<Props>(
     () => ({
       value:

@@ -28,7 +28,7 @@ const AdminLayout = () => {
         <nav className="fixed bottom-0 left-0 w-full border-t bg-white dark:bg-black flex">
           {menus.map((menu) => (
             <Link
-              to={`${menu.to}?bizinfo_id=${user.bizinfos[0].id}`}
+              to={menu.to}
               key={menu.to}
               className={twMerge(
                 "flex-1 flex-col items-center text-Gray py-2 bg-transparent hover:text-primary gap-1",

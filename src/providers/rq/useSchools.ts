@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { schoolRef } from "../../lib";
 
 const message = "Access Granted to Only Admin Users!";
-export default function useSchools(user: null | User, bizinfo_id: string) {
+export default function useSchools(user: null | User, bizinfo_id?: string) {
   const queryClient = useQueryClient();
   const queryKey = useMemo(
     () => [user?.uid, "schools", bizinfo_id],
