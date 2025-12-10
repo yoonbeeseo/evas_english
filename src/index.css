@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@import "./components.css";
+
+@theme {
+  --color-primary: var(--color-blue-500);
+  --color-Red: var(--color-red-500);
+  --color-Gray: var(--color-gray-500);
+}
+
+@layer base {
+  * {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+  body {
+    @apply bg-gray-50 dark:bg-gray-950;
+  }
+
+  h1 {
+    @apply font-black text-2xl;
+  }
+
+  button,
+  a {
+    @apply bg-gray-50 hover:bg-gray-100 hover:opacity-80 active:opacity-50 cursor-pointer disabled:opacity-50 rounded flex;
+  }
+
+  button.primary,
+  a.primary {
+    @apply bg-primary text-white;
+  }
+
+  div,
+  section {
+    @apply flex flex-col;
+  }
+
+  ul {
+    @apply grid;
+  }
+
+  div.row,
+  section.row {
+    @apply flex-row;
+  }
+}

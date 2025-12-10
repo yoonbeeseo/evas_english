@@ -1,0 +1,49 @@
+@layer components {
+  .container {
+    @apply p-2 bg-white;
+  }
+
+  .label {
+    @apply text-xs text-Gray;
+  }
+
+  .flex-center {
+    @apply items-center justify-center;
+  }
+
+  .input {
+    @apply border rounded h-12 p-2 outline-none bg-white dark:bg-black focus:border-primary;
+  }
+
+  input.gray {
+    @apply bg-gray-50 focus:bg-transparent;
+  }
+
+  .message {
+    @apply text-Red;
+  }
+
+  .submit {
+    @apply bg-primary text-white h-12 justify-center items-center;
+  }
+
+  .blank {
+    @apply bg-gray-50 animate-pulse rounded;
+  }
+
+  .blank_spinner {
+    @apply absolute top-1/2 left-1/2 -translate-1/2 z-1;
+  }
+
+  button.admin {
+    @apply bg-transparent flex-col gap-2 items-center overflow-hidden pt-2 text-Gray hover:text-primary min-w-10;
+  }
+
+  button.admin svg {
+    @apply size-5;
+  }
+
+  button.admin p {
+    @apply text-xs text-ellipsis line-clamp-2 text-center;
+  }
+}
