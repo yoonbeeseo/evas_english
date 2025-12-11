@@ -1,35 +1,20 @@
-import { useEffect, useState } from "react";
-import { useLessons } from "../../../providers/rq";
+import { useParents } from "../../../providers/rq";
 import { Link } from "react-router";
 import { IoAdd, IoSearchOutline, IoTrashOutline } from "react-icons/io5";
 import { twMerge } from "tailwind-merge";
 import { Spinner } from "../../../components/ui";
-import { lessonSorts } from "../../../lib";
+import { useState } from "react";
 
-const LessonHome = ({ user, bizinfo }: AuthContext) => {
-  const { data, isPending, deleteLesson } = useLessons(user, bizinfo?.id!);
-
-  const [target, setTarget] = useState<null | LessonSort>(null);
-  const [lessons, setLessons] = useState(data ?? []);
-  useEffect(() => {
-    const items: Lesson[] = [];
-    data?.map((item) => {
-      if (target) {
-        if (item.sort === target) {
-          items.push(item);
-        }
-        return;
-      }
-      items.push(item);
-    });
-
-    setLessons(items);
-  }, [data, target]);
-
+const ParentHome = ({ user, bizinfo }: AuthContext) => {
+  const { data, isPending, error, deleteParent } = useParents(
+    user,
+    bizinfo?.id!
+  );
+  const [parents, setParents] = useState(data ?? []);
   return (
     <div className="p-4 gap-2">
       <div className="flex-row justify-between items-center">
-        <h1>클래스 목록</h1>
+        <h1>학교 목록</h1>
         <Link
           to={"new"}
           className="border bg-primary text-white flex-center p-1 px-2 rounded-full"
@@ -41,10 +26,10 @@ const LessonHome = ({ user, bizinfo }: AuthContext) => {
       <ul className="flex flex-wrap gap-1 items-center">
         <li>
           <button
-            onClick={() => setTarget(null)}
+            // onClick={() => setTarget(null)}
             className={twMerge(
-              "label p-1 bg-white rounded-full border",
-              !target && "bg-primary text-white"
+              "label p-1 bg-white rounded-full border"
+              //   !target && "bg-primary text-white"
             )}
           >
             전체
@@ -53,15 +38,16 @@ const LessonHome = ({ user, bizinfo }: AuthContext) => {
         {isPending ? (
           <Spinner />
         ) : (
-          lessonSorts.map((sort) => (
+          [].map((sort) => (
             <li key={sort}>
               <button
-                onClick={() =>
-                  setTarget((prev) => (prev === sort ? null : sort))
+                onClick={
+                  () => {}
+                  //   setTarget((prev) => (prev === sort ? null : sort))
                 }
                 className={twMerge(
-                  "label p-1 bg-white rounded-full border",
-                  target === sort && "bg-primary text-white"
+                  "label p-1 bg-white rounded-full border"
+                  //   target === sort && "bg-primary text-white"
                 )}
               >
                 {sort}
@@ -75,18 +61,18 @@ const LessonHome = ({ user, bizinfo }: AuthContext) => {
           <div className="flex-center py-10 animate-pulse">
             <Spinner />
           </div>
-        ) : lessons.length > 0 ? (
-          lessons.map((lesson, index) => (
-            <li key={lesson.id} className={twMerge(index !== 0 && "border-t")}>
+        ) : parents.length > 0 ? (
+          parents.map((parent, index) => (
+            <li key={parent.id} className={twMerge(index !== 0 && "border-t")}>
               <div className="flex-row pl-2 hover:bg-gray-50">
                 <Link
                   className="gap-1 items-center flex-1 bg-transparent py-1"
-                  to={lesson.id}
+                  to={parent.id}
                 >
                   <span className="label bg-primary text-white rounded p-0.5 px-1">
-                    {lesson.sort}
+                    {parent.title}
                   </span>
-                  {lesson.name}
+                  {parent.name}
                 </Link>
                 <div className="flex-row">
                   <button className="icon icon-s w-6">
@@ -95,8 +81,8 @@ const LessonHome = ({ user, bizinfo }: AuthContext) => {
                   <button
                     className="icon icon-s"
                     onClick={async () => {
-                      if (confirm(`${lesson.name}을(를) 삭제하시겠습니까?`)) {
-                        await deleteLesson(lesson.id);
+                      if (confirm(`${parent.name}을(를) 삭제하시겠습니까?`)) {
+                        await deleteParent(parent.id);
                         alert("삭제되었습니다.");
                       }
                     }}
@@ -109,7 +95,7 @@ const LessonHome = ({ user, bizinfo }: AuthContext) => {
           ))
         ) : (
           <Link to="new" className="py-5 flex-center label">
-            추가된 클래스가 없습니다.
+            추가된 학부모가 없습니다.
           </Link>
         )}
       </ul>
@@ -117,4 +103,4 @@ const LessonHome = ({ user, bizinfo }: AuthContext) => {
   );
 };
 
-export default LessonHome;
+export default ParentHome;

@@ -3,7 +3,6 @@ import { createContext, use } from "react";
 const initialState: AuthContext = {
   user: null,
   initialized: false,
-  isOnline: false,
   bizinfo: null,
   selectBizinfo: () => {},
 };

@@ -21,6 +21,10 @@ const LessonHome = lazy(() => import("./admin/lessons/LessonHome"));
 const LessonNew = lazy(() => import("./admin/lessons/LessonNew"));
 const LessonDetail = lazy(() => import("./admin/lessons/LessonDetail"));
 
+const ParentHome = lazy(() => import("./admin/parents/ParentHome"));
+const ParentNew = lazy(() => import("./admin/parents/ParerntNew"));
+const ParentDetail = lazy(() => import("./admin/parents/ParentDetail"));
+
 export default function AppRouter() {
   return (
     <AppProvider>
@@ -59,6 +63,12 @@ function Routers() {
                 <Route index element={<LessonHome {...auth} />} />
                 <Route path="new" element={<LessonNew />} />
                 <Route path=":lesson_id" element={<LessonDetail />} />
+              </Route>
+
+              <Route path="parents">
+                <Route index element={<ParentHome {...auth} />} />
+                <Route path="new" element={<ParentNew />} />
+                <Route path=":parent_id" element={<ParentDetail />} />
               </Route>
             </Route>
           )}

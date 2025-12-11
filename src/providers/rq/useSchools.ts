@@ -41,6 +41,7 @@ export default function useSchools(user: null | User, bizinfo_id?: string) {
       if (!user) {
         throw new Error(message);
       }
+      console.log({ payload });
       try {
         switch (method) {
           case "POST":

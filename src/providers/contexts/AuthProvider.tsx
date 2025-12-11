@@ -40,20 +40,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  const [isOnline, setIsOnline] = useState(false);
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOnline);
-
-    return () => {
-      window.removeEventListener("offline", handleOffline);
-      window.removeEventListener("online", handleOnline);
-    };
-  }, []);
-
   const [bizinfo, setBizinfo] = useState<null | Bizinfo>(null);
   const selectBizinfo = useCallback(
     (payload: Bizinfo) => setBizinfo(payload),
@@ -61,10 +47,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   );
 
   return (
-    <Auth.Provider
-      value={{ user, initialized, isOnline, bizinfo, selectBizinfo }}
-    >
-      {!isOnline && "No Internet connection"}
+    <Auth.Provider value={{ user, initialized, bizinfo, selectBizinfo }}>
       {initialized ? children : <Loader />}
     </Auth.Provider>
   );

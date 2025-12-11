@@ -92,7 +92,7 @@ function Section({
   bizinfo_id,
 }: SectionProps) {
   return (
-    <div className="container border">
+    <div className="container border rounded-lg">
       <div className="flex-row items-center border-b pb-1">
         <button className="flex-1 bg-transparent font-bold text-xl gap-2 items-center">
           <span>{title}</span>
@@ -107,7 +107,7 @@ function Section({
       </div>
       <ul className="flex gap-2 overflow-x-auto">
         {isPending ? (
-          <div className="relative">
+          <div className="relative w-full">
             <Spinner className="blank_spinner" />
             <div className="blank h-12" />
           </div>

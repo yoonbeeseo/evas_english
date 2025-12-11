@@ -110,7 +110,7 @@ export default function useDexylect<T = any>(payload?: Payload<T>) {
   const [value, setValue] = useState<string>(
     payload?.state && payload?.target
       ? (payload?.state[0][payload.target as keyof T] as string)
-      : ""
+      : payload?.value ?? ""
   );
   const message = useMemo(() => {
     if (payload?.validator) {

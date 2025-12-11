@@ -53,7 +53,13 @@ interface Contact {
   value: string;
 }
 
-type ParentTitle = "아버님" | "어머님" | "할아버지" | "할머니" | "직접입력";
+type ParentTitle =
+  | "아버지"
+  | "어머니"
+  | "할아버지"
+  | "할머니"
+  | "기타"
+  | "직접입력";
 
 interface Parent {
   name: string;
@@ -68,4 +74,4 @@ interface Parent {
   updated_at: Date;
 }
 
-type ParentPayload = DBPayload<Parent>;
+type ParentPayload = DBPayload<Parent, "">;

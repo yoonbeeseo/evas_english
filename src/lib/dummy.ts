@@ -24,3 +24,11 @@ export const lessonSorts: LessonSort[] = [
   "고등부",
   "성인부",
 ];
+
+export const parentTitles: ParentTitle[] = [
+  "아버지",
+  "어머니",
+  "할아버지",
+  "할머니",
+  "기타",
+];

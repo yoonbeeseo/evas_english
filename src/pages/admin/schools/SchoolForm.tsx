@@ -32,7 +32,6 @@ const SchoolForm = ({
   const onSubmit = useCallback(
     () =>
       handler(async () => {
-        console.log(Name.message, Name.value, Sort.message, state[0]);
         // return console.log(state[0]);
         if (Sort.message) {
           Sort.focusSelect();
@@ -52,9 +51,9 @@ const SchoolForm = ({
 
           if (
             confirm(
-              `${payload ? "수정" : "추가"}되었습니다.${
-                !payload && " 새로운 학교를 추가하시겠습니까?"
-              }`
+              `${
+                payload ? "수정" : "추가"
+              }되었습니다. 새로운 학교를 추가하시겠습니까?}`
             )
           ) {
             state[1](initialState);
