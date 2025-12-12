@@ -1,5 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { useDexylect, useForm, useTextInput } from "../../../components/hooks";
+import {
+  useDexylect,
+  useForm,
+  useSwitch,
+  useTextInput,
+} from "../../../components/hooks";
 import { useParents } from "../../../providers/rq";
 import { useAtuh } from "../../../providers/contexts/Auth.use";
 import { useNavigate } from "react-router";
@@ -27,6 +32,8 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
   const Name = useTextInput({ state, target: "name" });
   const Sort = useDexylect({ value: "휴대폰" });
   const Mobile = useTextInput();
+
+  const PP = useSwitch();
 
   const { user, bizinfo } = useAtuh();
   const { createParent, replaceParent } = useParents(user, bizinfo?.id!);
@@ -102,6 +109,9 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
           placeholder="선택"
         />
         <Mobile.TextInput {...Mobile.props} label="연락처" required />
+      </div>
+      <div>
+        <PP.Switch {...PP.props} required message="asdfasdflasdf" />
       </div>
     </Form>
   );
