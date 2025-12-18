@@ -12,7 +12,7 @@
   }
 
   .input {
-    @apply border rounded h-12 p-2 outline-none bg-white dark:bg-black focus:border-primary;
+    @apply border rounded h-12 p-2 outline-none bg-white dark:bg-black focus:border-primary w-full;
   }
 
   input.gray {

@@ -1,15 +1,25 @@
-import { useCallback, useId, useMemo, useState } from "react";
+import {
+  useCallback,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from "react";
+import { IoCheckmark } from "react-icons/io5";
 import { twMerge } from "tailwind-merge";
 
 interface Payload {
   state?: boolean;
 }
 
-interface SwitchProps extends Payload {
+interface SwitchProps extends Payload, PropsWithChildren {
   message?: string;
   onClick: Func;
   id: string;
   required?: boolean;
+  onSubmitEditing?: Func;
+  isCheckbox?: boolean;
 }
 
 const useSwitch = (payload?: Payload) => {
@@ -24,29 +34,57 @@ const useSwitch = (payload?: Payload) => {
     [state, id, handler]
   );
 
+  const ref = useRef<HTMLDivElement>(null);
+  const focus = useCallback(() => ref.current?.focus(), []);
+
   const Switch = useCallback(
-    ({ message, state, onClick, id, required }: SwitchProps) => {
+    ({
+      message,
+      state,
+      onClick,
+      id,
+      required,
+      children,
+      onSubmitEditing,
+      isCheckbox,
+    }: SwitchProps) => {
       return (
-        <div className="flex-row items-center justify-between">
-          <label htmlFor={id} className="label">
-            {message ?? "need message here"}
+        <div
+          className="flex-row justify-between focus:border focus:rounded focus:p-1 gap-2"
+          ref={ref}
+        >
+          <label htmlFor={id} className="label flex-1">
+            {children ?? message ?? "need message here"}
             {required && <span className="label text-Red ml-1">*필수입력</span>}
           </label>
           <button
             type="button"
             id={id}
-            onClick={onClick}
+            onClick={() => {
+              onClick();
+              if (onSubmitEditing) {
+                onSubmitEditing();
+              }
+            }}
             className={twMerge(
-              "border rounded-full size-6 w-9 items-center transition-all",
+              !isCheckbox
+                ? "border rounded-full size-6 w-9 items-center transition-all"
+                : "size-6 flex-center",
               state && "bg-primary"
             )}
           >
-            <span
-              className={twMerge(
-                "border size-4 rounded-full bg-white transition-all ml-1",
-                state && "ml-3.5"
-              )}
-            />
+            {!isCheckbox ? (
+              <span
+                className={twMerge(
+                  "border size-4 rounded-full bg-white transition-all ml-1",
+                  state && "ml-3.5"
+                )}
+              />
+            ) : (
+              <IoCheckmark
+                className={twMerge(state ? "text-white" : "text-Gray")}
+              />
+            )}
           </button>
         </div>
       );
@@ -61,6 +99,7 @@ const useSwitch = (payload?: Payload) => {
     turnOff,
     handler,
     state,
+    focus,
   };
 };
 

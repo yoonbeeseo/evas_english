@@ -72,6 +72,7 @@ interface Parent {
   student_ids: string[];
   created_at: Date;
   updated_at: Date;
+  address: JusoAddress | null;
 }
 
 type ParentPayload = DBPayload<Parent, "">;

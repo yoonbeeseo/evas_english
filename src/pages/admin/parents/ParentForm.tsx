@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   useDexylect,
   useForm,
@@ -9,8 +9,17 @@ import { useParents } from "../../../providers/rq";
 import { useAtuh } from "../../../providers/contexts/Auth.use";
 import { useNavigate } from "react-router";
 import { parentTitles } from "../../../lib";
+import JusoForm from "./JusoForm";
+import useModal from "../../../components/hooks/useModal";
 
-const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
+const ParentForm = ({
+  payload,
+  isParent,
+  isAdmin,
+}: FormPayload<Parent | ParentPayload> & {
+  isParent?: boolean;
+  isAdmin?: boolean;
+}) => {
   const initialState = useMemo<Parent | ParentPayload>(
     () =>
       payload ??
@@ -22,6 +31,7 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
         name: "",
         student_ids: [],
         title: "",
+        address: null,
       } as ParentPayload),
     [payload]
   );
@@ -34,6 +44,11 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
   const Mobile = useTextInput();
 
   const PP = useSwitch();
+  const PPOB = useSwitch();
+  const RAPP = useSwitch();
+  const RAPPOB = useSwitch();
+
+  const A = useModal();
 
   const { user, bizinfo } = useAtuh();
   const { createParent, replaceParent } = useParents(user, bizinfo?.id!);
@@ -59,8 +74,15 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
           return;
         }
 
+        // RAPP 일 경우 학부모 알림 창에 요청 서류를 추가하고 학부모에게 서명요청이 왔습니다.
         if (payload) {
-          await replaceParent(state[0] as Parent);
+          const res = await replaceParent(state[0] as Parent);
+          if (res) {
+            //! 서명 요청시 props 필요
+            // if(RAPP.state ){
+            //   await parentRef(user?.uid!).doc(res.id).collection('requiry').add({})
+            // }
+          }
         } else {
           await createParent(state[0]);
         }
@@ -85,11 +107,17 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
       createParent,
       initialState,
       navi,
+      PP,
+      PPOB,
+      RAPP,
     ]
   );
 
   return (
-    <Form className="mt-4 container w-full border max-w-75 mx-auto gap-2">
+    <Form
+      className="mt-4 container w-full border max-w-75 mx-auto gap-2"
+      onSubmit={onSubmit}
+    >
       <div className="flex-row">
         <Title.Select
           {...Title.props}
@@ -97,6 +125,7 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
           data={parentTitles}
           placeholder="선택"
           required
+          onSubmitEditing={Name.focus}
         />
       </div>
       <Name.TextInput {...Name.props} label="이름" required />
@@ -107,11 +136,38 @@ const ParentForm = ({ payload }: FormPayload<Parent | ParentPayload>) => {
           required
           data={["휴대폰", "일반전화"]}
           placeholder="선택"
+          onSubmitEditing={Mobile.focus}
         />
         <Mobile.TextInput {...Mobile.props} label="연락처" required />
       </div>
-      <div>
-        <PP.Switch {...PP.props} required message="asdfasdflasdf" />
+      <button type="button" onClick={A.turnOn}>
+        Open Juso Form
+      </button>
+      <A.Modal>
+        <JusoForm />
+      </A.Modal>
+      <div className="gap-2">
+        {isParent && (
+          <>
+            <PP.Switch {...PP.props} onSubmitEditing={PPOB.focus}>
+              <b>[개인정보 처리방침]</b>에 동의합니다.
+            </PP.Switch>
+            <PPOB.Switch {...PPOB.props}>
+              법정대리인으로 <b>[자녀의 개인정보 처리방침]</b>에 동의합니다.
+            </PPOB.Switch>
+          </>
+        )}
+        {isAdmin && (
+          <>
+            <RAPP.Switch {...RAPP.props}>
+              학부모에게 <b>[개인정보 처리방침 동의]</b> 를 요청합니다.
+            </RAPP.Switch>
+            <RAPPOB.Switch {...RAPPOB.props}>
+              법정대리인에게 <b>[미성년자 개인정보 처리방침 동의]</b> 를
+              요청합니다.
+            </RAPPOB.Switch>
+          </>
+        )}
       </div>
     </Form>
   );

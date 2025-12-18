@@ -18,7 +18,6 @@ export default function useParents(user: User | null, bizinfo_id: string) {
         ...(doc.data() as Parent),
         id: doc.id,
       }));
-      console.log("parents:", data);
       return data;
     },
   });
@@ -35,12 +34,13 @@ export default function useParents(user: User | null, bizinfo_id: string) {
 
       switch (method) {
         case "POST":
-          await ref.add({
+          const postRes = await ref.add({
             ...(payload as Parent),
             created_at: new Date(),
             updated_at: new Date(),
           });
-          return;
+
+          return { id: postRes.id };
 
         case "PUT":
           await ref
@@ -56,8 +56,9 @@ export default function useParents(user: User | null, bizinfo_id: string) {
     onError(err) {
       console.log(err.message);
     },
-    onSuccess() {
+    onSuccess(res) {
       queryClient.invalidateQueries({ queryKey });
+      return res?.id;
     },
   });
 
