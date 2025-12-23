@@ -114,62 +114,72 @@ const ParentForm = ({
   );
 
   return (
-    <Form
-      className="mt-4 container w-full border max-w-75 mx-auto gap-2"
-      onSubmit={onSubmit}
-    >
-      <div className="flex-row">
-        <Title.Select
-          {...Title.props}
-          label="관계"
-          data={parentTitles}
-          placeholder="선택"
-          required
-          onSubmitEditing={Name.focus}
-        />
-      </div>
-      <Name.TextInput {...Name.props} label="이름" required />
-      <div className="flex-row gap-2">
-        <Sort.Select
-          {...Sort.props}
-          label="분류"
-          required
-          data={["휴대폰", "일반전화"]}
-          placeholder="선택"
-          onSubmitEditing={Mobile.focus}
-        />
-        <Mobile.TextInput {...Mobile.props} label="연락처" required />
-      </div>
-      <button type="button" onClick={A.turnOn}>
-        Open Juso Form
-      </button>
+    <>
+      <Form
+        className="mt-4 container w-full border max-w-75 mx-auto gap-2"
+        onSubmit={onSubmit}
+      >
+        <div className="flex-row">
+          <Title.Select
+            {...Title.props}
+            label="관계"
+            data={parentTitles}
+            placeholder="선택"
+            required
+            onSubmitEditing={Name.focus}
+          />
+        </div>
+        <Name.TextInput {...Name.props} label="이름" required />
+        <div className="flex-row gap-2">
+          <Sort.Select
+            {...Sort.props}
+            label="분류"
+            required
+            data={["휴대폰", "일반전화"]}
+            placeholder="선택"
+            onSubmitEditing={Mobile.focus}
+          />
+          <Mobile.TextInput {...Mobile.props} label="연락처" required />
+        </div>
+        <button type="button" onClick={A.turnOn}>
+          {state[0].address
+            ? state[0].address.roadAddrPart1 + " " + state[0].address.rest
+            : "Open Juso Form"}
+        </button>
+
+        <div className="gap-2">
+          {isParent && (
+            <>
+              <PP.Switch {...PP.props} onSubmitEditing={PPOB.focus}>
+                <b>[개인정보 처리방침]</b>에 동의합니다.
+              </PP.Switch>
+              <PPOB.Switch {...PPOB.props}>
+                법정대리인으로 <b>[자녀의 개인정보 처리방침]</b>에 동의합니다.
+              </PPOB.Switch>
+            </>
+          )}
+          {isAdmin && (
+            <>
+              <RAPP.Switch {...RAPP.props}>
+                학부모에게 <b>[개인정보 처리방침 동의]</b> 를 요청합니다.
+              </RAPP.Switch>
+              <RAPPOB.Switch {...RAPPOB.props}>
+                법정대리인에게 <b>[미성년자 개인정보 처리방침 동의]</b> 를
+                요청합니다.
+              </RAPPOB.Switch>
+            </>
+          )}
+        </div>
+      </Form>
       <A.Modal>
-        <JusoForm />
+        <JusoForm
+          onSelectJuso={(address) => {
+            state[1]((prev) => ({ ...prev, address }));
+          }}
+          closeFunc={A.turnOff}
+        />
       </A.Modal>
-      <div className="gap-2">
-        {isParent && (
-          <>
-            <PP.Switch {...PP.props} onSubmitEditing={PPOB.focus}>
-              <b>[개인정보 처리방침]</b>에 동의합니다.
-            </PP.Switch>
-            <PPOB.Switch {...PPOB.props}>
-              법정대리인으로 <b>[자녀의 개인정보 처리방침]</b>에 동의합니다.
-            </PPOB.Switch>
-          </>
-        )}
-        {isAdmin && (
-          <>
-            <RAPP.Switch {...RAPP.props}>
-              학부모에게 <b>[개인정보 처리방침 동의]</b> 를 요청합니다.
-            </RAPP.Switch>
-            <RAPPOB.Switch {...RAPPOB.props}>
-              법정대리인에게 <b>[미성년자 개인정보 처리방침 동의]</b> 를
-              요청합니다.
-            </RAPPOB.Switch>
-          </>
-        )}
-      </div>
-    </Form>
+    </>
   );
 };
 
