@@ -40,6 +40,7 @@ const JusoForm = ({
 
   const fetchFn = useCallback(
     async ({ pageParam }: { pageParam: number }): Promise<Props> => {
+      console.log({ value });
       const url = `${import.meta.env.VITE_JUSO_URL}?keyword=${value}&confmKey=${
         import.meta.env.VITE_JUSO_KEY
       }&currentPage=${pageParam}&countPerPage=20&resultType=json`;
@@ -61,7 +62,7 @@ const JusoForm = ({
         hasNextPage: totalCount - currentPage * 20 > 0,
       };
     },
-    []
+    [value]
   );
   const mutation = useMutation({
     mutationFn: async ({
@@ -140,6 +141,10 @@ const JusoForm = ({
     closeFunc();
   }, [handler, selectedJuso, Rest, onSelectJuso, closeFunc]);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   return (
     <Form className="bg-white">
       <div className="flex-row border overflow-hidden">
@@ -192,9 +197,9 @@ const JusoForm = ({
             {selectedJuso ? (
               <Item juso={selectedJuso} isSelectedJuso />
             ) : (
-              data.pages.map((page, i) => (
+              data?.pages?.map((page, i) => (
                 <Fragment key={i}>
-                  {page.data.map((item) => (
+                  {page?.data?.map((item) => (
                     <Item key={item.bdMgtSn} juso={item} />
                   ))}
                 </Fragment>
