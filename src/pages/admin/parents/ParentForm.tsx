@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import {
   useDexylect,
   useForm,
+  useJuso,
   useSwitch,
   useTextInput,
 } from "../../../components/hooks";
@@ -42,6 +43,8 @@ const ParentForm = ({
   const Name = useTextInput({ state, target: "name" });
   const Sort = useDexylect({ value: "휴대폰" });
   const Mobile = useTextInput();
+
+  const J = useJuso();
 
   const PP = useSwitch();
   const PPOB = useSwitch();
@@ -141,11 +144,7 @@ const ParentForm = ({
           />
           <Mobile.TextInput {...Mobile.props} label="연락처" required />
         </div>
-        <button type="button" onClick={A.turnOn}>
-          {state[0].address
-            ? state[0].address.roadAddrPart1 + " " + state[0].address.rest
-            : "Open Juso Form"}
-        </button>
+        <J.Button juso={state[0].address ?? null} onClick={A.turnOn} />
 
         <div className="gap-2">
           {isParent && (
@@ -172,7 +171,7 @@ const ParentForm = ({
         </div>
       </Form>
       <A.Modal>
-        <JusoForm
+        <J.Form
           onSelectJuso={(address) => {
             state[1]((prev) => ({ ...prev, address }));
           }}

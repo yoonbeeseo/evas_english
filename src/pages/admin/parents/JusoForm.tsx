@@ -14,13 +14,12 @@ import {
 import { Spinner } from "../../../components/ui";
 import { twMerge } from "tailwind-merge";
 
-const JusoForm = ({
-  onSelectJuso,
-  closeFunc,
-}: {
+export interface JusoFormProps {
   onSelectJuso: PropsFunc<JusoAddress>;
   closeFunc: Func;
-}) => {
+}
+
+const JusoForm = ({ onSelectJuso, closeFunc }: JusoFormProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const Keyword = useTextInput({ value: "원둔산6길 8-2" });
   const value = useDebouncedValue(Keyword.value);
