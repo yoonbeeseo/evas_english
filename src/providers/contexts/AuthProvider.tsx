@@ -14,6 +14,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     import.meta.env.MODE === "development" ? true : false
   );
   const [user, setUser] = useState<null | User>(null);
+  const [bizinfo, setBizinfo] = useState<null | Bizinfo>(null);
 
   useEffect(() => {
     const sub = auth.onAuthStateChanged(async (fbUser) => {
@@ -27,6 +28,11 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
               id: doc.id,
             }));
             setUser({ ...(snap.data() as User), bizinfos });
+            if (bizinfos?.length > 0) {
+              setBizinfo(bizinfos[0]);
+            } else {
+              setBizinfo(null);
+            }
           }
         }
       } else {
@@ -40,7 +46,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  const [bizinfo, setBizinfo] = useState<null | Bizinfo>(null);
   const selectBizinfo = useCallback(
     (payload: Bizinfo) => setBizinfo(payload),
     []

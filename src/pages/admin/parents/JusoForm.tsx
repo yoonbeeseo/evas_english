@@ -8,6 +8,7 @@ import {
 import {
   IoCheckmarkCircle,
   IoCheckmarkOutline,
+  IoChevronDown,
   IoRefresh,
   IoSearchOutline,
 } from "react-icons/io5";
@@ -73,22 +74,23 @@ const JusoForm = ({ onSelectJuso, closeFunc }: JusoFormProps) => {
       return data;
     },
     onError: (err) => console.log({ err }),
-    onSuccess: (res) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
     },
   });
 
-  const { isPending, fetchNextPage, data, error } = useInfiniteQuery({
-    initialPageParam: 1,
-    getNextPageParam: () => {
-      return undefined;
-    },
-    queryKey,
-    queryFn: async ({ pageParam }): Promise<Props> => {
-      const data = await fetchFn({ pageParam });
-      return data;
-    },
-  });
+  const { isPending, fetchNextPage, data, error, hasNextPage } =
+    useInfiniteQuery({
+      initialPageParam: 1,
+      getNextPageParam: ({ hasNextPage, currentPage }: Props) => {
+        return hasNextPage ? currentPage + 1 : undefined;
+      },
+      queryKey,
+      queryFn: async ({ pageParam }): Promise<Props> => {
+        const data = await fetchFn({ pageParam });
+        return data;
+      },
+    });
 
   const [selectedJuso, setSelectedJuso] = useState<Juso | null>(null);
   const Rest = useTextInput();
@@ -186,7 +188,7 @@ const JusoForm = ({ onSelectJuso, closeFunc }: JusoFormProps) => {
           </button>
         )}
       </div>
-      <div className="border">
+      <div className="">
         {isPending ? (
           <div className="p-5 items-center">
             <Spinner />
@@ -196,13 +198,26 @@ const JusoForm = ({ onSelectJuso, closeFunc }: JusoFormProps) => {
             {selectedJuso ? (
               <Item juso={selectedJuso} isSelectedJuso />
             ) : (
-              data?.pages?.map((page, i) => (
-                <Fragment key={i}>
-                  {page?.data?.map((item) => (
-                    <Item key={item.bdMgtSn} juso={item} />
-                  ))}
-                </Fragment>
-              ))
+              <>
+                {data?.pages?.map((page, i) => (
+                  <Fragment key={i}>
+                    {page?.data?.map((item) => (
+                      <Item key={item.bdMgtSn} juso={item} />
+                    ))}
+                  </Fragment>
+                ))}
+                {hasNextPage && (
+                  <li>
+                    <button
+                      type="button"
+                      className="w-full bg-transparent gap-2 flex-center label hover:text-Gray"
+                      onClick={async () => await fetchNextPage()}
+                    >
+                      더 보기 <IoChevronDown />
+                    </button>
+                  </li>
+                )}
+              </>
             )}
           </ul>
         ) : (

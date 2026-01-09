@@ -10,8 +10,10 @@ const Home = lazy(() => import("./Home"));
 const AuthHome = lazy(() => import("./auth/AuthHome"));
 const Test = lazy(() => import("./auth/Test"));
 const AdminHome = lazy(() => import("./admin/AdminHome"));
+
 const StudentHome = lazy(() => import("./admin/students/StudentHome"));
 const StudentNew = lazy(() => import("./admin/students/StudentNew"));
+const StudentDetail = lazy(() => import("./admin/students/StudentDetail"));
 
 const SchoolHome = lazy(() => import("./admin/schools/SchoolHome"));
 const SchoolNew = lazy(() => import("./admin/schools/SchoolNew"));
@@ -52,7 +54,7 @@ function Routers() {
               <Route path="students">
                 <Route index Component={StudentHome} />
                 <Route Component={StudentNew} path="new" />
-                <Route path=":sid" Component={Test} />
+                <Route path=":student_id" Component={StudentDetail} />
               </Route>
               <Route path="schools">
                 <Route index element={<SchoolHome {...auth} />} />

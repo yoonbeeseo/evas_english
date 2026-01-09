@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 
 const StudentHome = () => {
+  const {} = useStudents();
   return (
     <>
       StudentHome

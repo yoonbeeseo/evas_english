@@ -9,7 +9,7 @@ const Layout = ({ user }: { user: null | User }) => {
   const navi = useNavigate();
   return (
     <div
-      className="h-dvh"
+      className="min-h-dvh"
       onDoubleClick={() =>
         !user
           ? !pathname.includes("auth") && setShowing((prev) => !prev)

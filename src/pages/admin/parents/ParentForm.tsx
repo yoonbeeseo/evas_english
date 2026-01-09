@@ -10,8 +10,8 @@ import { useParents } from "../../../providers/rq";
 import { useAtuh } from "../../../providers/contexts/Auth.use";
 import { useNavigate } from "react-router";
 import { parentTitles } from "../../../lib";
-import JusoForm from "./JusoForm";
 import useModal from "../../../components/hooks/useModal";
+import { Button } from "../../../components/ui";
 
 const ParentForm = ({
   payload,
@@ -87,7 +87,14 @@ const ParentForm = ({
             // }
           }
         } else {
-          await createParent(state[0]);
+          // return console.log(state[0], bizinfo);
+          await createParent({
+            ...state[0],
+            bizinfo_ids: [bizinfo?.id!],
+            contacts: [
+              { isMobile: Mobile.value.startsWith("010"), value: Mobile.value },
+            ],
+          });
         }
 
         if (
@@ -113,13 +120,14 @@ const ParentForm = ({
       PP,
       PPOB,
       RAPP,
+      bizinfo,
     ]
   );
-
+  // http://localhost:5173/admin/parents/new
   return (
     <>
       <Form
-        className="mt-4 container w-full border max-w-75 mx-auto gap-2"
+        className="my-4 mb-18 container w-full border max-w-75 mx-auto gap-2"
         onSubmit={onSubmit}
       >
         <div className="flex-row">
@@ -168,6 +176,12 @@ const ParentForm = ({
               </RAPPOB.Switch>
             </>
           )}
+        </div>
+        <div className="flex-row gap-2">
+          <Button.Cancel className="px-4">취소</Button.Cancel>
+          <Button.Submit className="flex-1">
+            {payload ? "수정" : "등록"}
+          </Button.Submit>
         </div>
       </Form>
       <A.Modal>

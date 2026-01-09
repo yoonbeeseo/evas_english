@@ -10,7 +10,6 @@ const ParentHome = ({ user, bizinfo }: AuthContext) => {
     user,
     bizinfo?.id!
   );
-  const [parents, setParents] = useState(data ?? []);
   return (
     <div className="p-4 gap-2">
       <div className="flex-row justify-between items-center">
@@ -61,8 +60,8 @@ const ParentHome = ({ user, bizinfo }: AuthContext) => {
           <div className="flex-center py-10 animate-pulse">
             <Spinner />
           </div>
-        ) : parents.length > 0 ? (
-          parents.map((parent, index) => (
+        ) : data && data?.length > 0 ? (
+          data?.map((parent, index) => (
             <li key={parent.id} className={twMerge(index !== 0 && "border-t")}>
               <div className="flex-row pl-2 hover:bg-gray-50">
                 <Link
@@ -75,9 +74,9 @@ const ParentHome = ({ user, bizinfo }: AuthContext) => {
                   {parent.name}
                 </Link>
                 <div className="flex-row">
-                  <button className="icon icon-s w-6">
+                  <Link to={parent.id} className="icon icon-s w-6">
                     <IoSearchOutline />
-                  </button>
+                  </Link>
                   <button
                     className="icon icon-s"
                     onClick={async () => {

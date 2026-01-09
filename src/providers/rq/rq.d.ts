@@ -76,3 +76,41 @@ interface Parent {
 }
 
 type ParentPayload = DBPayload<Parent, "">;
+
+interface Memo {
+  title: string | null;
+  body: string;
+  id: string;
+  created_at: Date;
+  is_important: boolean;
+  is_pinned: null | Date;
+}
+
+interface StudentEntity {
+  name: string;
+  id: string;
+  bizinfo_id: string;
+  created_at: Date;
+  updated_at: Date;
+  address: JusoAddress | null;
+  schools: Pick<School, "id" | "level">[];
+  lessons: string[];
+  parents: string[];
+  mobiles: Contact[];
+  payment_date: number;
+  memos: string[];
+  enrolled_at: Date;
+  is_under_age: boolean;
+  has_privacy_policy: null | Date;
+  has_privacy_policy_on_behalf: null | Date;
+}
+
+interface Student
+  extends Omit<StudentEntity, "memos" | "schools" | "lessons" | "parents"> {
+  memos: Memo[];
+  schools: School[];
+  lessons: Lesson[];
+  parents: Parent[];
+}
+
+type StudentPayload = DBPayload<StudentEntity, "">;
